@@ -19,14 +19,14 @@ public class Test {
 
     //////////////////////////
 
-        MyArrayList<Student> students = new MyArrayList<>();
-        students.getLength();
-        System.out.println(students.getCountOfElements());
-        students.add(new Student(14,"G"));
-        students.get(0);
-        students.getLength();
-        System.out.println(students.getCountOfElements());
-        students.add(new Student(14,"G"));
+        MyArrayList<Student> myArray = new MyArrayList<>(3);
+        myArray.add(new Student(14,"b"));
+        myArray.add(new Student(14,"b"));
+        myArray.add(new Student(14,"b"));
+        myArray.set(3,new Student(14,"f"));
+        System.out.println(myArray.toString());
+        System.out.println(myArray.getLength());
+
 
     }
 }

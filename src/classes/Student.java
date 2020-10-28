@@ -7,4 +7,9 @@ public class Student {
         this.ID = ID;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "ID:"+ID+" name:"+name;
+    }
 }

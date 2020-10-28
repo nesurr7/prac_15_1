@@ -1,11 +1,6 @@
 package classes;
 
-import jdk.internal.util.ArraysSupport;
-
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 
 public class MyArrayList<E> {
 
@@ -14,57 +9,39 @@ public class MyArrayList<E> {
      //Элементы
      private Object[] elements;
      //Массив по умолчанию присваиваемый главному
-     private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
      private static final Object[] EMPTY_ELEMENTDATA = {};
      //Кол-во элементов not null
      private int countOfElements;
+
      MyArrayList(int initialCapacity) {
           if (initialCapacity > 0) {
                this.elements = new Object[initialCapacity];
           } else if (initialCapacity == 0) {
                this.elements = EMPTY_ELEMENTDATA;
-          } else throw new IllegalArgumentException("Illegal Capacity: " +
+          } else throw new IllegalArgumentException("Неверный размер: " +
                   initialCapacity);
      }
-     MyArrayList(){
-          elements = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+
+     MyArrayList() {
+          elements = EMPTY_ELEMENTDATA;
      }
 
-     private void add(E e, Object[] elements, int s) {
-          if (s == elements.length)
-               elements = grow();
-          System.out.println(elements.length);
-          elements[s] = e;
-          countOfElements = s + 1;
+     public void add(E e) {
+          if (countOfElements == elements.length)
+               elements = grow(elements.length + 1);
+          elements[countOfElements] = e;
+          countOfElements += 1;
      }
 
-//     public void ensureCapacity(int minCapacity) {
-//          if (minCapacity > elements.length
-//                  && !(elements == DEFAULTCAPACITY_EMPTY_ELEMENTDATA
-//                  && minCapacity <= size)) {
-//               grow(minCapacity);
-//          }
-//     }
-
-
-     public boolean add(E e) {
-          add(e, elements, countOfElements);
-          return true;
-     }
 
      private Object[] grow(int minCapacity) {
           int oldCapacity = elements.length;
-          if (oldCapacity > 0 || elements != DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
-               int newCapacity = ArraysSupport.newLength(oldCapacity, minCapacity - oldCapacity,
-                       oldCapacity >> 1);
+          if (oldCapacity > 0 || elements != EMPTY_ELEMENTDATA) {
+               int newCapacity = oldCapacity << 1;
                return elements = Arrays.copyOf(elements, newCapacity);
           } else {
                return elements = new Object[Math.max(DEFAULT_SIZE, minCapacity)];
           }
-     }
-
-     private Object[] grow() {
-          return grow(countOfElements + 1);
      }
 
      public int getCountOfElements() {
@@ -72,16 +49,48 @@ public class MyArrayList<E> {
      }
 
      public E get(int index) {
-          Objects.checkIndex(index, countOfElements);
-          return elements(index);
+          if (index > elements.length - 1 || index < 0)
+               throw new IndexOutOfBoundsException("Неверный индекс");
+          return (E) elements[index];
      }
 
      public int getLength() {
           return elements.length;
      }
 
-     E elements(int index) {
-          return (E) elements[index];
+     public boolean isEmpty() {
+          return (countOfElements == 0);
      }
 
+     public void clear() {
+          for (int i = 0; i < countOfElements; i++) {
+               elements[i] = null;
+          }
+     }
+
+     public void remove(int index) {
+          if (index > elements.length - 1 || index < 0)
+               throw new IndexOutOfBoundsException("Неверный индекс");
+          int newSize;
+          if ((newSize = elements.length - 1) > index)
+               System.arraycopy(elements, index + 1, elements, index, newSize - index);
+          elements[newSize] = null;
+          countOfElements -= 1;
+     }
+
+     public void set(int index, E e) {
+          if (++countOfElements > elements.length) grow(elements.length + 1);
+          System.arraycopy(elements, index, elements, index + 1, elements.length - index - 1);
+          elements[index] = e;
+
+     }
+
+     @Override
+     public String toString() {
+          String finString = "";
+          for (int i = 0; i < countOfElements; i++) {
+               finString += (elements[i]).toString() + "\n";
+          }
+          return finString;
+     }
 }
